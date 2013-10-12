@@ -19,11 +19,13 @@ Linux上的萌否电台客户端bash脚本（试尝版），可能有众多bug�
 2.  从版本库获取moefmcmd
 
     git clone https://github.com/mike2718/moefmcmd
+
     cd moefmcmd
 
 3.  运行萌否客户端脚本
 
     chmod u+x moefmcmd.sh
+
     ./moefmcmd.sh
 
 如果要切换歌曲，按```Ctrl-C```一次。如果要关闭客户端，快速按```Ctrl-C```两次。
