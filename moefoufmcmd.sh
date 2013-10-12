@@ -1,8 +1,8 @@
 #!/bin/bash
-# Program:
+# 软件:
 #     萌否电台客户端bash脚本
-# History:
-# 2013/10/12	Mike	First release
+# 历史:
+# 2013/10/12	Mike Akiba	First release
 
 for (( ; ; ))
 do
