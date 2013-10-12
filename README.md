@@ -14,7 +14,7 @@ Linux上的萌否电台客户端bash脚本（试尝版），可能有众多bug�
 
     sudo apt-get install mpg123 curl
 
-再[下载jd](http://stedolan.github.io/jq/download/)二进制包，设置环境变量。也可以自己编译jd。
+再[下载jq](http://stedolan.github.io/jq/download/)二进制包，设置环境变量。也可以自己编译jq。
 
 2.  从版本库获取moefmcmd
 
