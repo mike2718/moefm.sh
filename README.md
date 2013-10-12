@@ -10,19 +10,20 @@ Linux上的萌否电台客户端bash脚本（试尝版），可能有众多bug�
 * [curl](http://curl.haxx.se/) 命令行版本的下载工具，用于获取萌否json
 
 ## 使用方法 ##
-1.  安装依赖的软件，Ubuntu上：
-```Shell
-sudo apt-get install mpg123 curl
-```
-[下载jd](http://stedolan.github.io/jq/download/)，设置环境变量
+1.  Ubuntu上安装必须的软件包
+
+    sudo apt-get install mpg123 curl
+
+再[下载jd](http://stedolan.github.io/jq/download/)二进制包，设置环境变量。也可以自己编译jd。
+
 2.  从版本库获取moefmcmd
-```Shell
-git clone https://github.com/mike2718/moefmcmd
-cd moefmcmd
-```
-3.  运行萌否客户端bash
-```Shell
-chmod u+x moefmcmd.sh
-./moefmcmd.sh
-```
-如果要切换歌曲，按Ctrl-C一次，如果要关闭客户端，快速按Ctrl-C两次。
+
+    git clone https://github.com/mike2718/moefmcmd
+    cd moefmcmd
+
+3.  运行萌否客户端脚本
+
+    chmod u+x moefmcmd.sh
+    ./moefmcmd.sh
+
+如果要切换歌曲，按```Ctrl-C```一次。如果要关闭客户端，快速按```Ctrl-C```两次。
