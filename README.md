@@ -6,13 +6,13 @@ Linux上的萌否电台客户端bash脚本（试尝版），可能有众多bug�
  
 ## 依赖软件 ##
 * [jq](http://stedolan.github.io/jq/) 使用稳定版本的jq，用于解析萌否API的json
-* [mpg123](http://www.mpg123.de/) 用于命令行播放网络上的mp3文件
+* [mpg321](http://mpg321.sourceforge.net/) 用于命令行播放网络上的mp3文件
 * [curl](http://curl.haxx.se/) 命令行版本的下载工具，用于获取萌否json
 
 ## 使用方法 ##
 1.  Ubuntu上安装必须的软件包
 
-    sudo apt-get install mpg123 curl
+    sudo apt-get install mpg321 curl
 
 2.  再[下载jq](http://stedolan.github.io/jq/download/)二进制包，设置环境变量。也可以自己编译jq。
 
