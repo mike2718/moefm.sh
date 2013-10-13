@@ -18,6 +18,6 @@ do
    # else
    #     echo $artist - $title
    # fi
-    mpg321 -q -S $mp3_url
+    mpg123 -q $mp3_url
 done
 

@@ -10,7 +10,7 @@ moefmcmd.sh
 用以下版本测试
 
 * [jq](http://stedolan.github.io/jq/) 1.3
-* [mpg321](http://mpg321.sourceforge.net/) 0.3.2-1
+* [mpg123](http://www.mpg123.de/) 1.16.0
 * [curl](http://curl.haxx.se/) 7.22.0
 
 ## 使用方法 ##
@@ -22,7 +22,7 @@ cd jq-1.3
 ./configure
 make
 sudo make install
-sudo apt-get install mpg321 curl
+sudo apt-get install mpg123 curl
 curl -ROL https://github.com/mike2718/moefmcmd/raw/master/moefmcmd.sh
 chmod +x moefmcmd.sh
 ./moefmcmd.sh
