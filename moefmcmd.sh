@@ -11,9 +11,13 @@ do
     moefoufm_json=$(curl -s -A moefmcmd.sh 'http://moe.fm/listen/playlist?api=json&api_key=4e229396346768a0c4ee2462d76eb0be052592bf8')
     mp3_url=$(echo $moefoufm_json | jq ".response.playlist[$number].url" | sed  's/\"//g')
 
-    title=$(echo $moefoufm_json | jq ".response.playlist[$number].title")
-    echo $title
-
-    mpg321 -q $mp3_url
+    title=$(echo $moefoufm_json | jq ".response.playlist[$number].sub_title" | sed 's/\"//g')
+   # artist=$(echo $moefoufm_json | jq ".response.playlist[$number].artist" | sed 's/\"//g')
+   # if [$artist == ""]; then
+         echo " " $title
+   # else
+   #     echo $artist - $title
+   # fi
+    mpg321 -q -S $mp3_url
 done
 

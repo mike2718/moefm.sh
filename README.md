@@ -9,9 +9,9 @@ moefmcmd.sh
 
 用以下版本测试
 
-* [jq](http://stedolan.github.io/jq/) 1.3: 使用稳定版本的jq，用于解析萌否API的json
-* [mpg321](http://mpg321.sourceforge.net/) 0.3.2-1: 用于命令行播放网络上的mp3文件
-* [curl](http://curl.haxx.se/) 7.22.0: 命令行版本的下载工具，用于获取萌否json
+* [jq](http://stedolan.github.io/jq/) 1.3
+* [mpg321](http://mpg321.sourceforge.net/) 0.3.2-1
+* [curl](http://curl.haxx.se/) 7.22.0
 
 ## 使用方法 ##
 
