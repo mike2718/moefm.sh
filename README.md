@@ -23,7 +23,7 @@ cd jq-1.3
 make
 sudo make install
 sudo apt-get install mpg321 curl
-curl -ROL https://github.com/mike2718/moefmcmd/raw/master/moefoufmcmd.sh
+curl -ROL https://github.com/mike2718/moefmcmd/raw/master/moefmcmd.sh
 chmod +x moefmcmd.sh
 ./moefmcmd.sh
 ```
