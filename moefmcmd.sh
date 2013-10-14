@@ -1,6 +1,8 @@
 #!/bin/bash
-# 软件:
+# 程序:
 #     萌否电台客户端bash脚本
+# 依赖软件:
+#     mpg123, jq, curl
 # 历史:
 # 2013/10/12	Mike Akiba	First release
 
@@ -12,12 +14,7 @@ do
     mp3_url=$(echo $moefoufm_json | jq ".response.playlist[$number].url" | sed  's/\"//g')
 
     title=$(echo $moefoufm_json | jq ".response.playlist[$number].sub_title" | sed 's/\"//g')
-   # artist=$(echo $moefoufm_json | jq ".response.playlist[$number].artist" | sed 's/\"//g')
-   # if [$artist == ""]; then
-         echo " " $title
-   # else
-   #     echo $artist - $title
-   # fi
-    mpg123 -q $mp3_url
+    echo " $title"
+    mpg123 -y -q $mp3_url 2>/dev/null
 done
 
