@@ -1,9 +1,7 @@
 moefmcmd.sh
 ===========
 
-运行在Linux上的萌否电台客户端bash脚本（试尝版）。本脚本为怀旧系无线电爱好者专版，不提供更复杂功能，不喜勿用，ZB什么的最讨厌了！讨厌，讨厌，最不喜欢你了！
-
-在Ubuntu 12.04 LTS测试。
+运行在Linux上的萌否电台客户端shell脚本（试尝版）。本脚本为m酱的极简主义专版萌否电台客户端~
  
 ## 依赖软件 ##
 
@@ -15,6 +13,8 @@ moefmcmd.sh
 
 ## 使用方法 ##
 
+在Ubuntu上，
+
 ```sh
 curl -ROL http://stedolan.github.io/jq/download/source/jq-1.3.tar.gz
 tar -zxvf jq-1.3.tar.gz
@@ -24,8 +24,11 @@ make
 sudo make install
 sudo apt-get install mpg123 curl
 curl -ROL https://github.com/mike2718/moefmcmd/raw/master/moefmcmd.sh
-chmod +x moefmcmd.sh
+chmod 755 moefmcmd.sh
 ./moefmcmd.sh
 ```
 
-如果要跳过当前曲目，按`Ctrl-C`一次。如果要关闭客户端，按`Ctrl-Z`。
+* `SPACE` `s`: 暂停播放，再按一次为继续播放
+* `q` `Ctrl-C`: 跳到下一首曲目
+* `Ctrl-Z`: 退出程序
+
