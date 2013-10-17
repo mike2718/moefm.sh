@@ -13,7 +13,7 @@ get_moefm_json () {
 
 while true; do
     number=$(curl -s -A moefmcmd.sh 'http://www.random.org/integers/?num=1&min=1&max=9&col=1&base=10&format=plain&rnd=new')
-    # echo $number # 物理随机数起作用？
+    
     mp3_url=$(get_moefm_json | jq ".response.playlist[$number].url" | sed  's/\"//g')
     title=$(get_moefm_json | jq ".response.playlist[$number].sub_title" | sed 's/\"//g')
     clear

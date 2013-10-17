@@ -7,22 +7,22 @@ moefmcmd.sh
 
 用以下版本测试
 
-* [jq](http://stedolan.github.io/jq/) 1.3
-* [mpg123](http://www.mpg123.de/) 1.16.0
-* [curl](http://curl.haxx.se/) 7.22.0
+* [jq](http://stedolan.github.io/jq/) 1.3: 解析json
+* [mpg123](http://www.mpg123.de/) 1.16.0: 播放用
+* [curl](http://curl.haxx.se/) 7.22.0: 下载用
 
 ## 使用方法 ##
 
-在Ubuntu上，
+在Ubuntu上，执行
 
-```sh
+```bash
+sudo apt-get install mpg123 curl
 curl -ROL http://stedolan.github.io/jq/download/source/jq-1.3.tar.gz
 tar -zxvf jq-1.3.tar.gz
 cd jq-1.3
 ./configure
 make
 sudo make install
-sudo apt-get install mpg123 curl
 curl -ROL https://github.com/mike2718/moefmcmd/raw/master/moefmcmd.sh
 chmod 755 moefmcmd.sh
 ./moefmcmd.sh
