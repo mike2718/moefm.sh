@@ -23,12 +23,13 @@ cd jq-1.3
 ./configure
 make
 sudo make install
-curl -ROL https://github.com/mike2718/moefmcmd/raw/master/moefmcmd.sh
+git clone https://github.com/mike2718/moefmcmd
+cd moefmcmd
 chmod 755 moefmcmd.sh
 ./moefmcmd.sh
 ```
 
-* `SPACE` `s`: 暂停播放，再按一次为继续播放
+* `s` `SPACE`: 暂停/继续播放
 * `q` `Ctrl-C`: 跳到下一首曲目
 * `Ctrl-Z`: 退出程序
 
