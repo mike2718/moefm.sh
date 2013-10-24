@@ -25,7 +25,9 @@ chmod 755 moefmcmd.sh
 * `q` `Ctrl-C`: 跳到下一首曲目
 * `Ctrl-Z`: 退出程序
 
-## 方便使用 ##
+## 更便利的使用方法 ##
+
+直接丢到~/bin，随时运行
 
 ```bash
 cd moefmcmd
