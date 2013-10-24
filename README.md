@@ -5,11 +5,9 @@ moefmcmd.sh
  
 ## 依赖软件 ##
 
-用以下版本测试
-
-* [jq](http://stedolan.github.io/jq/) 1.3: 解析json
-* [mpg123](http://www.mpg123.de/) 1.16.0: 播放用
-* [curl](http://curl.haxx.se/) 7.22.0: 下载用
+* [TickTick](https://github.com/kristopolous/TickTick) 仓库内已包含
+* [mpg123](http://www.mpg123.de/)
+* [curl](http://curl.haxx.se/)
 
 ## 使用方法 ##
 
@@ -17,12 +15,6 @@ moefmcmd.sh
 
 ```bash
 sudo apt-get install mpg123 curl
-curl -ROL http://stedolan.github.io/jq/download/source/jq-1.3.tar.gz
-tar -zxvf jq-1.3.tar.gz
-cd jq-1.3
-./configure
-make
-sudo make install
 git clone https://github.com/mike2718/moefmcmd
 cd moefmcmd
 chmod 755 moefmcmd.sh
@@ -33,3 +25,12 @@ chmod 755 moefmcmd.sh
 * `q` `Ctrl-C`: 跳到下一首曲目
 * `Ctrl-Z`: 退出程序
 
+## 方便使用 ##
+
+```bash
+cd moefmcmd
+mkdir ~/bin
+cp *.sh ~/bin
+. .bashrc
+moefmcmd
+```
