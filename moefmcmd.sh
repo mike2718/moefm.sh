@@ -2,7 +2,7 @@
 # 程序:
 #     萌否电台客户端shell脚本
 # 依赖软件:
-#     mpg123, jq, curl
+#     mpg123, curl
 # 历史:
 # 2013/10/12	Mike Akiba	初次发布
 . ticktick.sh
@@ -72,8 +72,6 @@ while true; do
     artist_decoded=$(echo -e $artist | sed -e 's/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g' | xargs echo -e)
     album_decoded=$(echo -e $album | sed -e 's/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g' | xargs echo -e)
     clear
-   # unset PROMPT_COMMAND
-   # PROMPT_COMMAND='echo -ne "\033]0;ha ha ha \007"'
     echo "
 * $title_decoded
 
