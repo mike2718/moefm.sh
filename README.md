@@ -33,6 +33,6 @@ chmod 755 moefmcmd.sh
 cd moefmcmd
 mkdir ~/bin
 cp *.sh ~/bin
-. .bashrc
+. ~/.bashrc
 moefmcmd
 ```
