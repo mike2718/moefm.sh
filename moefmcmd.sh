@@ -73,11 +73,11 @@ while true; do
     album_decoded=$(echo -e $album | sed -e 's/%\([0-9A-F][0-9A-F]\)/\\\\\x\1/g' | xargs echo -e)
     clear
     echo "
-* $title_decoded
+ $title_decoded
 
 艺术家: $artist_decoded
-专辑: $album_decoded
--------------------------------------------------------------------
+专辑:   $album_decoded
+
 [SPACE] 暂停/继续 [q] 下一曲 [Ctrl-Z] 退出
 "
     mpg123 -q -C $mp3_url_decoded
