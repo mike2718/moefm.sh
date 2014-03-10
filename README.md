@@ -19,7 +19,7 @@ chmod 755 moefmcmd.sh
 
 * `s` `SPACE`: 暂停/继续播放
 * `q` `Ctrl-C`: 跳到下一首曲目
-* `Ctrl-Z`: 退出程序
+* `Ctrl-Z`: 退出
 
 ## 更便利的使用方法 ##
 
