@@ -1,21 +1,14 @@
 moefmcmd.sh
 ===========
 
-运行在Ubuntu上的萌否电台客户端shell脚本。
-可以用ssh操作听音乐唷~
+运行在Ubuntu上的萌否电台客户端bash脚本。可以用终端听萌否电台唷~
  
-## 依赖软件 ##
-
-* [TickTick](https://github.com/kristopolous/TickTick) 仓库内已包含
-* [mpg123](http://www.mpg123.de/)
-* [curl](http://curl.haxx.se/)
-
 ## 安装和使用 ##
 
-在Ubuntu上，执行
+在Ubuntu的终端上，执行
 
 ```bash
-sudo apt-get install mpg123 curl
+sudo apt-get install mpg123 curl jq
 git clone https://github.com/mike2718/moefmcmd
 cd moefmcmd
 chmod 755 moefmcmd.sh
@@ -35,7 +28,7 @@ chmod 755 moefmcmd.sh
 ```bash
 cd moefmcmd
 mkdir ~/bin
-cp *.sh ~/bin
+cp moefmcmd.sh ~/bin
 . ~/.bashrc
 moefmcmd.sh
 ```
