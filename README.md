@@ -1,7 +1,7 @@
 moefmcmd.sh
 ===========
 
-运行在Ubuntu上的萌否电台客户端bash脚本。可以用终端听萌否电台唷~。
+运行在Ubuntu上的[萌否电台](http://moe.fm)bash脚本客户端。可以用终端听萌否电台唷~。
 
 [![moefmcmd.sh运行在Ubuntu](img/screen.png)](#安装和使用)
  
