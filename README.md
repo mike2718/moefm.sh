@@ -34,3 +34,9 @@ cp moefmcmd.sh ~/bin
 . ~/.bashrc
 moefmcmd.sh
 ```
+## 依赖软件 ##
+
+* [mpg123](http://www.mpg123.de/)
+* [curl](http://curl.haxx.se/)
+* [jq](http://stedolan.github.io/jq/)
+
