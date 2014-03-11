@@ -12,8 +12,12 @@ get_moefm_json () {
 }
 
 while true; do
-    number=$(curl -s -A moefmcmd.sh 'http://www.random.org/integers/?num=1&min=1&max=9&col=1&base=10&format=plain&rnd=new')
+    #number=$(curl -s -A moefmcmd.sh 'http://www.random.org/integers/?num=1&min=1&max=9&col=1&base=10&format=plain&rnd=new')
+    number=$(((RANDOM % 9) + 1))
     mp3_url=$(get_moefm_json | jq -M -r ".response.playlist[$number].url")
+    if [ "$mp3_url" == "null" ]; then
+        continue
+    fi
     title=$(get_moefm_json | jq -M -r ".response.playlist[$number].sub_title")
     artist=$(get_moefm_json | jq -M -r ".response.playlist[$number].artist")
     album=$(get_moefm_json | jq -M -r ".response.playlist[$number].wiki_title")
