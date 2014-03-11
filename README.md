@@ -1,6 +1,8 @@
 moefmcmd.sh
 ===========
 
+![moefmcmd.sh运行在Ubuntu](img/screen.png)
+
 运行在Ubuntu上的萌否电台客户端bash脚本。可以用终端听萌否电台唷~
  
 ## 安装和使用 ##
