@@ -13,7 +13,8 @@ get_moefm_json () {
 
 while true; do
     #number=$(curl -s -A moefmcmd.sh 'http://www.random.org/integers/?num=1&min=1&max=9&col=1&base=10&format=plain&rnd=new')
-    number=$(((RANDOM % 9) + 1))
+    rand=$(od -An -N2 -i /dev/urandom | tr -d ' ')
+    number=$((rand % 9))
     mp3_url=$(get_moefm_json | jq -M -r ".response.playlist[$number].url")
     if [ "$mp3_url" == "null" ]; then
         continue
@@ -22,8 +23,6 @@ while true; do
     artist=$(get_moefm_json | jq -M -r ".response.playlist[$number].artist")
     album=$(get_moefm_json | jq -M -r ".response.playlist[$number].wiki_title")
     clear
-    # for debug
-    #printf '%s\n' "$mp3_url"
     printf '艺术家: %s\n曲名:   %s\n专辑:   %s\n\n[SPACE] 暂停/继续 [q] 下一曲 [Ctrl-Z] 退出\n' "$artist" "$title" "$album"
     mpg123 -q -C "$mp3_url"
 done
