@@ -5,15 +5,20 @@
 #   mpg123, jq, curl
 # 历史:
 #   2013/10/12  Mike Akiba  初次发布
+#   2015/3/1    Desmond Ding
 
 BASE_URL='http://moe.fm/listen/playlist?api=json&api_key='
 API_KEY='4e229396346768a0c4ee2462d76eb0be052592bf8'
 URL=$BASE_URL$API_KEY
 
-TITLE='曲名:   %s\n'
-ALBUM='专辑:   %s\n'
-ARTIST='艺术家: %s\n\n'
-CONTROLLER='[SPACE] 暂停/继续 [q] 下一曲 [Ctrl-Z] 退出\n'
+blue=`tput setaf 4`
+reset=`tput sgr0`
+bold=`tput bold`
+
+TITLE="曲名:   ${bold}${blue}%s\n${reset}"
+ALBUM="专辑:   ${bold}${blue}%s\n${reset}"
+ARTIST="艺术家: ${bold}${blue}%s\n\n${reset}"
+CONTROLLER="${bold}${blue}[SPACE]${reset} 暂停/继续 ${bold}${blue}[q]${reset} 下一曲 ${bold}${blue}[Ctrl-Z]${reset} 退出\n"
 UI=$TITLE$ALBUM$ARTIST$CONTROLLER
 
 # 获取json
@@ -27,7 +32,7 @@ get_json()
 shuffle()
 {
     a=( {0..8} )
-    
+
     for i in {8..1}
     do
         rand_dev=$(od -An -N2 -i /dev/urandom | tr -d ' ')
@@ -93,7 +98,7 @@ show_ui()
 while true; do
     # 获取json
     get_json
-   
+
     # 随机歌曲
     shuffle
 
