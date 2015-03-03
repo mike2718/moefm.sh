@@ -2,7 +2,7 @@
 
 可以用终端听[萌否电台](http://moe.fm)唷~。
 
-[![moefmcmd.sh运行在Ubuntu](img/moefmcmd.png)](#安装和使用)
+[![moefmcmd.sh运行在Ubuntu](assets/img/moefmcmd.png)](#安装和使用)
  
 ## 安装和使用 ##
 

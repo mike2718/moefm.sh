@@ -1,11 +1,11 @@
 #!/bin/bash
-# 脚本名:
-#   萌否电台客户端bash脚本
-# 依赖软件:
-#   mpg123, jq, curl
-# 历史:
-#   2013/10/12  Mike Akiba  初次发布
-#   2015/3/1    Desmond Ding
+#
+# 萌否电台客户端bash脚本
+# moe.fm bash script
+#
+# History:
+#   2013/10/12  Mike Akiba
+#   2015/3/3    Desmond Ding
 
 BASE_URL='http://moe.fm/listen/playlist?api=json&api_key='
 API_KEY='4e229396346768a0c4ee2462d76eb0be052592bf8'
@@ -21,14 +21,12 @@ ARTIST="艺术家: ${bold}${blue}%s\n\n${reset}"
 CONTROLLER="${bold}${blue}[SPACE]${reset} 暂停/继续 ${bold}${blue}[q]${reset} 下一曲 ${bold}${blue}[Ctrl-Z]${reset} 退出\n"
 UI=$TITLE$ALBUM$ARTIST$CONTROLLER
 
-# 获取json
 get_json()
 {
     moefm_json=$(curl -s -A moefmcmd.sh echo $URL)
-
 }
 
-# Fisher-Yates shuffle 算法
+# Fisher-Yates shuffle
 shuffle()
 {
     a=( {0..8} )
@@ -43,7 +41,6 @@ shuffle()
     done
 }
 
-# 获取mp3地址
 get_mp3_url()
 {
     mp3_url=$(echo $moefm_json | jq -M -r ".response.playlist[${a[$i]}].url")
@@ -54,29 +51,32 @@ get_mp3_url()
     fi
 }
 
-# 获取歌曲标题
-get_title()
+get_song_title()
 {
     title=$(echo $moefm_json | jq -M -r ".response.playlist[${a[$i]}].sub_title")
     title=$(check_empty $title)
 }
 
-# 获取专辑
-get_album()
+get_album_title()
 {
     album=$(echo $moefm_json | jq -M -r ".response.playlist[${a[$i]}].wiki_title")
     album=$(check_empty $album)
 }
 
-# 获取艺术家
-get_artist()
+get_artist_name()
 {
     artist=$(echo $moefm_json | jq -M -r ".response.playlist[${a[$i]}].artist")
     artist=$(check_empty $artist)
 }
 
+get_album_cover()
+{
+    cover=$(echo $moefm_json | jq -M -r ".response.playlist[${a[$i]}].cover.small")
+}
+
 
 # 检查歌曲信息是否为空，若为空则以“未知”替代
+# If the song info is empty, replace it with "Unknown"
 check_empty()
 {
     local param=$1
@@ -89,34 +89,31 @@ check_empty()
     echo "$param"
 }
 
-# 显示文字用户界面
+# Show user interface
 show_ui()
 {
     printf "$UI" "$title" "$album" "$artist"
 }
 
 while true; do
-    # 获取json
     get_json
 
-    # 随机歌曲
     shuffle
 
     for i in {0..8}
     do
-        # 清除上一首歌曲信息
+        # Clean up previous song info
         clear
 
-        # 获取歌曲信息
+        # Get song info
         get_mp3_url
-        get_title
-        get_album
-        get_artist
+        get_song_title
+        get_album_title
+        get_artist_name
 
-        # 显示用户界面
         show_ui
 
-        # 播放歌曲
+        # Play!
         mpg123 -q -C "$mp3_url"
     done
 done
