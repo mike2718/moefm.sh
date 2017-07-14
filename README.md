@@ -1,19 +1,26 @@
-## 萌否电台bash脚本客户端 ##
+萌否电台bash脚本客户端
+====
 
-可以用终端听[萌否电台](http://moe.fm)唷~。
+可以用终端听[萌否电台](http://moe.fm)。
 
-[![moefmcmd.sh运行在Ubuntu](assets/img/moefmcmd.png)](#安装和使用)
- 
-## 安装和使用 ##
+[![moefm.sh运行在Ubuntu](assets/img/moefm.sh.png)](#安装和使用)
 
-在Ubuntu的终端上，执行
+## 依赖软件 ##
+
+* [mpg123](http://www.mpg123.de/)
+* [curl](http://curl.haxx.se/)
+* [jq](http://stedolan.github.io/jq/)
+
+## 安装 ##
+
+在终端上执行
 
 ```bash
 sudo apt-get install mpg123 curl jq
-git clone git://github.com/mike2718/moefmcmd.git
-cd moefmcmd
-chmod 755 moefmcmd.sh
-./moefmcmd.sh
+git clone git://github.com/mike2718/moefm.sh.git
+cd moefm.sh
+chmod 755 moefm.sh
+./moefm.sh
 ```
 
 ## 快捷键 ##
@@ -27,15 +34,12 @@ chmod 755 moefmcmd.sh
 变成随处可运行的客户端。
 
 ```bash
-cd moefmcmd
+cd moefm.sh
 mkdir ~/bin
-cp moefmcmd.sh ~/bin
+cp moefm.sh ~/bin
 . ~/.bashrc
-moefmcmd.sh
+moefm.sh
 ```
-## 依赖软件 ##
 
-* [mpg123](http://www.mpg123.de/)
-* [curl](http://curl.haxx.se/)
-* [jq](http://stedolan.github.io/jq/)
-
+## 使用协议
+[MIT](https://github.com/mike2718/moefm.sh/blob/master/LICENSE)

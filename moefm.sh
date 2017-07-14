@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 萌否电台客户端bash脚本
+# 萌否电台bash脚本客户端
 # moe.fm bash script
 #
 # History:
@@ -23,7 +23,7 @@ UI=$TITLE$ALBUM$ARTIST$CONTROLLER
 
 get_json()
 {
-    moefm_json=$(curl -s -A moefmcmd.sh echo $URL)
+    moefm_json=$(curl -s -A moefm.sh echo $URL)
 }
 
 # Fisher-Yates shuffle
