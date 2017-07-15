@@ -17,9 +17,8 @@
 
 ```bash
 sudo apt-get install mpg123 curl jq
-git clone git://github.com/mike2718/moefm.sh.git
+git clone https://github.com/mike2718/moefm.sh.git
 cd moefm.sh
-chmod 755 moefm.sh
 ./moefm.sh
 ```
 
