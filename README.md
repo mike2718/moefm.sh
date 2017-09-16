@@ -32,6 +32,30 @@ cd moefm.sh
 ./moefm.sh
 ```
 
+## 参数
+
+```bash
+./moefm.sh
+#随机播放歌曲
+
+./moefm.sh -s 191459
+#播放song_id为191459的歌曲
+#相当于网页播放 http://moe.fm/listen/h5?song=191459
+
+./moefm.sh -a 40276
+#播放album_id为40276的整张专辑
+#相当于 http://moe.fm/music/40276 
+
+./moefm.sh -a 40276 -R
+#随机播放(仅对 -a -s -r参数有效)
+
+./moefm.sh -S "ぽっぴんジャンプ♪"
+# 搜索这首歌曲并播放
+
+./moefm.sh -h
+#显示参数表
+```
+
 ## 快捷键
 
 * `s` `SPACE`: 暂停/继续播放
