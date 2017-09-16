@@ -36,7 +36,7 @@ cd moefm.sh
 
 ```bash
 ./moefm.sh
-#随机播放歌曲
+#随机播放一些歌曲
 
 ./moefm.sh -s 191459
 #播放song_id为191459的歌曲
@@ -47,7 +47,7 @@ cd moefm.sh
 #相当于 http://moe.fm/music/40276 
 
 ./moefm.sh -a 40276 -R
-#随机播放(仅对 -a -s -r参数有效)
+#随机播放列表(仅对 -a -s -r参数有效)
 
 ./moefm.sh -S "ぽっぴんジャンプ♪"
 # 搜索这首歌曲并播放
