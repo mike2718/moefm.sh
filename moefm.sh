@@ -226,8 +226,6 @@ while true; do
 	search $KEYWORDS
 	entrynumb=0
 	for((i=0;i<$SEARCH_ENTRIES;i++))
-	# Search results are sorted by song id (greater),
-	# but we always upload main song at first...
 	do
 
 	    QUERY_OK[$i]=$(echo $search_json | jq -M -r ".response.subs[$i].sub_upload")
