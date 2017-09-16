@@ -7,9 +7,9 @@
 #   2013/10/12  Mike Akiba
 #   2015/3/3    Desmond Ding
 
-BASE_URL='http://moe.fm/listen/playlist?api=json&api_key='
-API_KEY='4e229396346768a0c4ee2462d76eb0be052592bf8'
-URL=$BASE_URL$API_KEY
+BASE_URL='http://moe.fm/listen/playlist?api=json'
+API_KEY='&api_key=4e229396346768a0c4ee2462d76eb0be052592bf8'
+URL=$BASE_URL
 
 blue=`tput setaf 4`
 reset=`tput sgr0`
@@ -23,6 +23,21 @@ UI=$TITLE$ALBUM$ARTIST$CONTROLLER
 
 get_json()
 {
+
+    if [ -n "$ALBUM_ARG" ]; then
+	URL+="&music=$ALBUM_ARG"
+    fi
+
+    if [ -n "$SONG_ARG" ]; then
+	URL+="&song=$SONG_ARG"
+    fi
+
+    if [ -n "$RADIO_ARG" ]; then
+	URL+="&radio=$RADIO_ARG"
+    fi
+
+    URL+=$API_KEY
+
     moefm_json=$(curl -s -A moefm.sh echo $URL)
 }
 
@@ -79,7 +94,7 @@ get_album_cover()
 # If the song info is empty, replace it with "Unknown"
 check_empty()
 {
-    local param=$1
+    local param=$*
     local empty="未知"
 
     if [ -z "$param" ]; then
@@ -94,6 +109,38 @@ show_ui()
 {
     printf "$UI" "$title" "$album" "$artist"
 }
+
+
+while getopts "a:s:r:h" arg
+do
+    case $arg in
+
+	a)
+	    ALBUM_ARG=$OPTARG;;
+
+	s)
+	    SONG_ARG=$OPTARG;;
+
+	r)
+	    RADIO_ARG=$OPTARG;;
+	h)
+	    echo -e "usage: moefm.sh [option(s)]\n
+-a <ALBUM_ID> Specific album
+-s <SONG_ID>  Specific song
+-r <RADIO_ID> Specific personal radio
+-h            Show this help page"
+	    exit 1;;
+
+
+	?)
+	    echo "unknown arg";;
+
+    esac
+done
+
+
+
+
 
 while true; do
     get_json
