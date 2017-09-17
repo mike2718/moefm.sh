@@ -330,7 +330,7 @@ download()
     if [ "$res" = "" ]; then
 
 	if [ "$MIX_OPT" = "1" ]; then
-	    wget -q "${playq_url[$playq_front]}" -O "$path" &
+	  nohup wget -q "${playq_url[$playq_front]}" -O "$path" >/dev/null 2>&1 &
 	    echo $vect >> $DATABASE
 	fi
 	echo "${playq_url[$playq_front]}"
@@ -349,7 +349,7 @@ download()
 	    sed -i '/^'"$sid"'/d' $DATABASE
 	    # delete database entry
 	    if [ "$MIX_OPT" = "1" ]; then
-		wget -q "${playq_url[$playq_front]}" -O "$path" &
+		nohup wget -q "${playq_url[$playq_front]}" -O "$path" >/dev/null 2>&1 &
 		echo $vect >> $DATABASE
 	    fi
 
