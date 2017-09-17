@@ -27,22 +27,34 @@ cd moefm.sh
 ./moefm.sh
 ```
 
+第一次执行会要求设定数据库位置
+
+![设定数据库位置](assets/img/moefm.sh_install.png)
+
+请输入合适的路径('~'会被自动转义)
+或直接回车
+
+之后请打开一个新的终端进行操作
+
+![打开新终端](assets/img/moefm.sh_install_2.png)
+
+
 ## 参数
 
 ```bash
 ./moefm.sh -X
-#随机播放一些歌曲
+# 随机播放一些歌曲
 
 ./moefm.sh -s 191459
-#播放song_id为191459的歌曲
-#相当于网页播放 http://moe.fm/listen/h5?song=191459
+# 播放song_id为191459的歌曲
+# 相当于网页播放 http://moe.fm/listen/h5?song=191459
 
 ./moefm.sh -a 40276
-#播放album_id为40276的整张专辑
-#相当于 http://moe.fm/music/40276 
+# 播放album_id为40276的整张专辑
+# 相当于 http://moe.fm/music/40276 
 
 ./moefm.sh -a 40276 -R
-#随机播放列表(仅对 -a -s -r参数有效)
+# 随机播放列表(仅对 -a -s -r参数有效)
 
 ./moefm.sh -S "ぽっぴんジャンプ♪"
 # 搜索这首歌曲并播放
