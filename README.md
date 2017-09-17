@@ -6,16 +6,16 @@
 
 ## 安装
 
-Lubuntu:
+Lubuntu / Ubuntu:
 
 ```bash
-sudo apt-get install mpg123 curl jq git
+sudo apt-get install mpg123 curl jq git wget
 ```
 
 OSX (with [Homebrew](https://brew.sh/)):
 
 ```
-brew install mpg123 curl jq
+brew install mpg123 curl jq wget
 ```
 
 执行:
@@ -30,7 +30,7 @@ cd moefm.sh
 ## 参数
 
 ```bash
-./moefm.sh
+./moefm.sh -X
 #随机播放一些歌曲
 
 ./moefm.sh -s 191459
@@ -46,6 +46,29 @@ cd moefm.sh
 
 ./moefm.sh -S "ぽっぴんジャンプ♪"
 # 搜索这首歌曲并播放
+
+./moefm.sh -l
+# 混合模式，听歌的同时会保存歌曲到本地
+
+./moefm.sh -L
+# 离线模式，在本地数据库搜索歌曲（仅支持 -S 选项）
+
+# 如果既没有 -l，也没有-L，为常规模式，
+# 从网络上下载元数据并在本地检索，若存在歌曲即用本地文件播放，
+# 不存在则用网络播放，但不保存到本地
+
+./moefm.sh -c 100
+# 把本地缓存的文件清理至 100MB 以下
+
+./moefm.sh -C red
+# 改变粗体字的颜色，
+# 参数可以是black, red, green, yellow, blue, magenta, cyan和white
+# 默认为蓝色
+
+./moefm.sh -R
+# 循环播放
+
+
 
 ./moefm.sh -h
 #显示参数表
