@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 萌否电台bash脚本客户端(重构版本)
+# 萌否电台bash脚本客户端
 # moe.fm bash script
 #
 # History:
