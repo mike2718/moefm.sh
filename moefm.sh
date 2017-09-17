@@ -129,25 +129,19 @@ search_local()
     # I have no choice...
     res=$(cat $DATABASE | grep -i "$keywd")
 
-    if [ "$res" = "" ]; then
+    for i in $(echo $res)
+    do
+	local sid=$(echo $i | awk -F '####' '{print $1}')
+	local stit=$(echo $i | awk -F '####' '{print $2}')
+	local salb=$(echo $i | awk -F '####' '{print $3}')
+	local sart=$(echo $i | awk -F '####' '{print $4}')
 
-	echo $vect >> database
-    else
+	stit=$(check_str_empty $stit)
+	salb=$(check_str_empty $salb)
+	sart=$(check_str_empty $sart)
 
-	for i in $(echo $res)
-	do
-	    local sid=$(echo $i | awk -F '####' '{print $1}')
-	    local stit=$(echo $i | awk -F '####' '{print $2}')
-	    local salb=$(echo $i | awk -F '####' '{print $3}')
-	    local sart=$(echo $i | awk -F '####' '{print $4}')
-
-	    stit=$(check_str_empty $stit)
-	    salb=$(check_str_empty $salb)
-	    sart=$(check_str_empty $sart)
-
-	    push_playq "null" "$stit" "$salb" "$sart" "$sid" "null" 
-	done
-    fi
+	push_playq "null" "$stit" "$salb" "$sart" "$sid" "null" 
+    done
 }
 
 search()
