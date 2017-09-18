@@ -3,8 +3,8 @@
 用终端听[萌否电台](http://moe.fm)。
 
 [![moefm.sh运行在Lubuntu](assets/img/moefm.sh.png)](#安装和使用)
-[萌否电台数据库管理](assets/img/moedatabase_1.png)
-[萌否电台数据库管理](assets/img/moedatabase_2.png)
+![萌否电台数据库管理](assets/img/moedatabase_1.png)
+![萌否电台数据库管理](assets/img/moedatabase_2.png)
 
 ## 安装
 
