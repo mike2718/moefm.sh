@@ -89,19 +89,80 @@ check_str_empty()
     echo "$param"
 }
 
+pure_download()
+{
+    clear
+    local id=$*
+    local url=$BASE_URL
+    url+="&song=$id"
+    url+=$API_KEY
+    local moefm_json=$(curl -s -A moefm.sh echo $url)
+    
+    local mp3_url=$(echo $moefm_json | jq -M -r ".response.playlist[0].url")
+    local title=$(echo $moefm_json | jq -M -r ".response.playlist[0].sub_title")
+    local album=$(echo $moefm_json | jq -M -r ".response.playlist[0].wiki_title")
+    local artist=$(echo $moefm_json | jq -M -r ".response.playlist[0].artist")
+    local song_siz=$(echo $moefm_json | jq -M -r ".response.playlist[0].file_size")
+    local path="$DATABASE_DIR"
+    path+="/$id.mp3"
+    title=$(check_str_empty $title)
+    album=$(check_str_empty $album)
+    artist=$(check_str_empty $artist)
 
+    title=${title//' '/'%20'}
+    album=${album//' '/'%20'}
+    artist=${artist//' '/'%20'}
+
+    echo -e "正在下载的歌曲: "
+    local TITLE="曲名:   ${bold}${COLOR_ARG}%s\n${reset}"
+    local ALBUM="专辑:   ${bold}${COLOR_ARG}%s\n${reset}"
+    local ARTIST="艺术家: ${bold}${COLOR_ARG}%s\n${reset}"
+    local ID="歌曲ID: ${bold}${COLOR_ARG}%s\n\n${reset}"
+    local UI=$TITLE$ALBUM$ARTIST$ID
+    printf "$UI" "$title" "$album" "$artist" "$id"
+    local vect="$id####$title####$album####$artist"
+    local res=$(cat $DATABASE | grep "$id")
+
+    if [ "$res" = "" ]; then
+	### database didn't have this song...
+	echo $vect >> $DATABASE
+	wget "$mp3_url" -O "$path" --progress=bar:force 2>&1 | tail -f -n +8
+	echo "下载完成！"
+	# Add the entry
+    else
+	### Entry exists
+	local file_size=$(du -a "$path" | awk '{print $1}')
+	local delta=$(($file_size-$song_siz))
+	delta=${delta#-}
+	# There is always faults...
+
+	if [ $delta -gt 10 ]; then
+	    ### FILE_BROKEN!
+	    rm "$path"
+	    sed -i '/^'"$id"'/d' $DATABASE
+	    # delete database entry
+	    echo $vect >> $DATABASE
+	    wget "$mp3_url" -O "$path" --progress=bar:force 2>&1 | tail -f -n +8
+	    echo "下载完成！"
+	else
+	    echo "条目已存在！"
+	fi
+    fi
+
+}
 
 
 show_ui()
 {
     TITLE="曲名:   ${bold}${COLOR_ARG}%s\n${reset}"
     ALBUM="专辑:   ${bold}${COLOR_ARG}%s\n${reset}"
-    ARTIST="艺术家: ${bold}${COLOR_ARG}%s\n\n${reset}"
+    ARTIST="艺术家: ${bold}${COLOR_ARG}%s\n${reset}"
+    ID="歌曲ID: ${bold}${COLOR_ARG}%s\n\n${reset}"
     CONTROLLER="${bold}${COLOR_ARG}[SPACE]${reset} 暂停/继续 ${bold}${COLOR_ARG}[q]${reset} 下一曲 ${bold}${COLOR_ARG}[Ctrl-Z]${reset} 退出\n"
 
-    UI=$TITLE$ALBUM$ARTIST$CONTROLLER
+    UI=$TITLE$ALBUM$ARTIST$ID$CONTROLLER
 
-    printf "$UI" "$1" "$2" "$3"
+    printf "$UI" "$1" "$2" "$3" "$4"
 }
 
 
@@ -250,7 +311,7 @@ clean()
 }
 
 # main function
-while getopts "a:c:C:s:S:r:RhlLX" arg
+while getopts "a:c:C:D:s:S:r:RhlLX" arg
 do
     case $arg in
 	a)
@@ -264,6 +325,10 @@ do
 	    tmp=$OPTARG
 	    COLOR_ARG=`eval echo '$'"$tmp"`;;
 
+	D)
+	    ARG=$OPTARG
+	    pure_download $ARG
+	    exit 0;;
 
 	l)
 	    MIX_OPT=1;;
@@ -292,6 +357,7 @@ do
 -a <ALBUM_ID> Specific album
 -c <SIZE>     clean database to <SIZE> (MB)
 -C <COLOR>    Set UI Color
+-D <SONG_ID>  Download a song
 -h            Show this help page
 -l            Mixed Mode (automatically download and save music)
 -L            Local Mode (if there is no internet connection...)
@@ -387,12 +453,12 @@ play_a_song()
     local stitle=${playq_tit[$playq_front]}
     local salbum=${playq_alb[$playq_front]}
     local sartist=${playq_art[$playq_front]}
-
+    local sid=${playq_id[$playq_front]}
     stitle=${stitle//'%20'/' '}
     salbum=${salbum//'%20'/' '}
     sartist=${sartist//'%20'/' '}
     clear
-    show_ui "$stitle" "$salbum" "$sartist"
+    show_ui "$stitle" "$salbum" "$sartist" "$sid"
     play
     pop_playq
 }
