@@ -103,15 +103,18 @@ pure_download()
     local album=$(echo $moefm_json | jq -M -r ".response.playlist[0].wiki_title")
     local artist=$(echo $moefm_json | jq -M -r ".response.playlist[0].artist")
     local song_siz=$(echo $moefm_json | jq -M -r ".response.playlist[0].file_size")
+
+    if [ "$title" = "" ]; then
+	echo "输入好像哪里不对..."
+	exit 0
+    fi
+
     local path="$DATABASE_DIR"
     path+="/$id.mp3"
     title=$(check_str_empty $title)
     album=$(check_str_empty $album)
     artist=$(check_str_empty $artist)
 
-    title=${title//' '/'%20'}
-    album=${album//' '/'%20'}
-    artist=${artist//' '/'%20'}
 
     echo -e "正在下载的歌曲: "
     local TITLE="曲名:   ${bold}${COLOR_ARG}%s\n${reset}"
@@ -120,6 +123,11 @@ pure_download()
     local ID="歌曲ID: ${bold}${COLOR_ARG}%s\n\n${reset}"
     local UI=$TITLE$ALBUM$ARTIST$ID
     printf "$UI" "$title" "$album" "$artist" "$id"
+
+    title=${title//' '/'%20'}
+    album=${album//' '/'%20'}
+    artist=${artist//' '/'%20'}
+
     local vect="$id####$title####$album####$artist"
     local res=$(cat $DATABASE | grep "$id")
 
@@ -288,27 +296,6 @@ resolve_json()
 
 }
 
-clean()
-{
-    local size=$*
-    local tomb=1024
-    size=$((size*tomb))
-   local file_tab=$(ls -altur --time-style=iso "$DATABASE_DIR" | grep "^-" | grep -v "database" | awk '{print $8}')
-   for i in $file_tab
-   do
-     local cursize=$(du  "$DATABASE_DIR" | awk '{print $1}')
-
-     local file_id=$(echo $i | awk -F '.' '{print $1}')
-     #   sed -i '/^'"$sid"'/d' $DATABASE
-
-     if [ $cursize -lt $size ]; then
-	 break
-     fi
-     rm "$DATABASE_DIR/$i"
-     sed -i '/^'"$file_id"'/d' $DATABASE     
-   done
-
-}
 
 # main function
 while getopts "a:c:C:D:s:S:r:RhlLX" arg
@@ -316,10 +303,6 @@ do
     case $arg in
 	a)
 	    ALBUM_ARG=$OPTARG;;
-
-	c)
-	    CLEAN_ARG=$OPTARG
-	    CLEAN_OPT=1;;
 
 	C)
 	    tmp=$OPTARG
@@ -355,7 +338,6 @@ do
 	h)
 	    echo -e "usage: moefm.sh [option(s)]\n
 -a <ALBUM_ID> Specific album
--c <SIZE>     clean database to <SIZE> (MB)
 -C <COLOR>    Set UI Color
 -D <SONG_ID>  Download a song
 -h            Show this help page
@@ -479,12 +461,6 @@ if [ "$MOEFM_DATABASE" = "" ]; then
     source "$HOME/.bashrc"
     mkdir $dab
     touch $dab/database
-    exit 0
-fi
-
-if [ "$CLEAN_OPT" = "1" ]; then
-    clean "$CLEAN_ARG"
-    echo "Clean cache complete !"
     exit 0
 fi
 
