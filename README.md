@@ -53,6 +53,9 @@ cd moefm.sh
 # 播放album_id为40276的整张专辑
 # 相当于 http://moe.fm/music/40276 
 
+./moefm.sh -D 191459
+# 将song_id为191459的歌曲下载到本地数据库中
+
 ./moefm.sh -S "ぽっぴんジャンプ♪"
 # 搜索这首歌曲并播放
 
