@@ -3,19 +3,21 @@
 用终端听[萌否电台](http://moe.fm)。
 
 [![moefm.sh运行在Lubuntu](assets/img/moefm.sh.png)](#安装和使用)
+[萌否电台数据库管理](assets/img/moedatabase_1.png)
+[萌否电台数据库管理](assets/img/moedatabase_2.png)
 
 ## 安装
 
 Lubuntu / Ubuntu:
 
 ```bash
-sudo apt-get install mpg123 curl jq git wget
+sudo apt-get install mpg123 curl jq git wget mp3info
 ```
 
 OSX (with [Homebrew](https://brew.sh/)):
 
 ```
-brew install mpg123 curl jq wget
+brew install mpg123 curl jq wget mp3info
 ```
 
 执行:
@@ -41,6 +43,7 @@ cd moefm.sh
 
 ## 参数
 
+moefm.sh:
 ```bash
 ./moefm.sh -X
 # 随机播放一些歌曲
@@ -69,9 +72,6 @@ cd moefm.sh
 # 从网络上下载元数据并在本地检索，若存在歌曲即用本地文件播放，
 # 不存在则用网络播放，但不保存到本地
 
-./moefm.sh -c 100
-# 把本地缓存的文件清理至 100MB 以下
-
 ./moefm.sh -C red
 # 改变粗体字的颜色，
 # 参数可以是black, red, green, yellow, blue, magenta, cyan和white
@@ -84,6 +84,34 @@ cd moefm.sh
 
 ./moefm.sh -h
 #显示参数表
+```
+
+moedatabase.sh
+```bash
+./moedatabase.sh -c 100
+# 将本地的音乐文件清理至 100MB 以下
+
+./moedatabase.sh -e "unravel"
+# 将包含"unravel"的歌曲从数据库中导出
+
+./moedatabase.sh -E
+# 将数据库中的所有歌曲导出
+
+./moedatabase.sh -d "unravel"
+# 将包含"unravel"的歌曲从数据库中删除
+
+./moedatabase.sh -D
+# 清空数据库
+
+./moedatabase.sh -O "~/moe_export"
+# (与-e/-E一起使用) 设置导出的路径，默认为~/moefm_export
+
+./moedatabase.sh -S "unravel"
+# 搜索并列出数据库中包含"unravel"的歌曲
+
+
+./moedatabase.sh -h
+# 显示帮助
 ```
 
 ## 快捷键
