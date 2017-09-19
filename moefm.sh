@@ -117,7 +117,39 @@ switch_display_to_save()
     echo "$str"
 }
 	 
+love_track()
+{
+    local id=$*
+    local url=$BASE_URL
+    url+="&song=$id"
+    url+=$API_KEY
+    local moefm_json=$(curl -s -A moefm.sh echo $url)
+    
+    local mp3_url=$(echo $moefm_json | jq -M -r ".response.playlist[0].url")
+    local title=$(echo $moefm_json | jq -M -r ".response.playlist[0].sub_title")
+    local album=$(echo $moefm_json | jq -M -r ".response.playlist[0].wiki_title")
+    local artist=$(echo $moefm_json | jq -M -r ".response.playlist[0].artist")
+    local song_siz=$(echo $moefm_json | jq -M -r ".response.playlist[0].file_size")
 
+
+    if [ "$title" = "" ]; then
+	echo "输入好像哪里不对..."
+	exit 0
+    fi
+
+    title=$(switch_net_to_save "$title")
+    album=$(switch_net_to_save "$album")
+    artist=$(switch_net_to_save "$artist")
+
+    title=$(switch_save_to_display "$title")
+    album=$(switch_save_to_display "$album")
+    artist=$(switch_save_to_display "$artist")
+
+    python3 -c 'import scrobble; scrobble.Love_one("'"$title"'", "'"$album"'", "'"$artist"'")' >/dev/null 2>&1
+    echo -e "\e[1m\e[33m$title\e[0m - \e[1m\e[32m$artist\e[0m loved"
+
+
+}
 
 pure_download()
 {
@@ -336,7 +368,7 @@ resolve_json()
 
 
 # main function
-while getopts "a:c:C:D:s:S:r:RhlLUX" arg
+while getopts "a:c:C:D:F:s:S:r:RhlLUX" arg
 do
     case $arg in
 	a)
@@ -351,6 +383,9 @@ do
 	    pure_download $ARG
 	    exit 0;;
 
+	F)
+	    love_track $OPTARG
+	    exit 0;;
 	l)
 	    MIX_OPT=1;;
 
@@ -381,6 +416,7 @@ do
 -a <ALBUM_ID> Specific album
 -C <COLOR>    Set UI Color
 -D <SONG_ID>  Download a song
+-F <SONG_ID>  Love a song
 -h            Show this help page
 -l            Mixed Mode (automatically download and save music)
 -L            Local Mode (if there is no internet connection...)
