@@ -121,8 +121,8 @@ moedatabase.sh
 * `Ctrl-Z`: 退出
 
 ## 小技巧
-* 在.bashrc中添加```bash alias moefm='moefm -C "yellow" -U '```以自动改变UI颜色和同步歌曲
-* 播放本地数据库的所有歌曲```bash moefm -S "#" -L ```
+* 在.bashrc中添加``` alias moefm='moefm -C "yellow" -U '```以自动改变UI颜色和同步歌曲
+* 播放本地数据库的所有歌曲``` moefm -S "#" -L ```
 
 ## 使用协议
 [MIT](https://github.com/mike2718/moefm.sh/blob/master/LICENSE)
