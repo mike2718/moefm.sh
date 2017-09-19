@@ -89,6 +89,68 @@ check_str_empty()
     echo "$param"
 }
 
+switch_net_to_save()
+{
+    local str=$*;
+    str=${str//' '/'%20'};
+    echo "$str"
+}
+
+switch_save_to_display()
+{
+    local str=$*;
+    str=${str//'&#039;'/"'"}
+    str=${str//'&#39;'/"'"}
+    str=${str//'&lt;'/'<'}
+    str=${str//'&gt;'/'>'}
+    str=${str//'%20'/' '};
+    echo "$str"
+}
+
+switch_display_to_save()
+{
+    local str=$*;
+    str=${str//"'"/'&#039;'}
+    str=${str//"<"/'&lt;'}
+    str=${str//">"/'&gt;'}
+    str=${str//" "/'%20'}
+    echo "$str"
+}
+	 
+love_track()
+{
+    local id=$*
+    local url=$BASE_URL
+    url+="&song=$id"
+    url+=$API_KEY
+    local moefm_json=$(curl -s -A moefm.sh echo $url)
+    
+    local mp3_url=$(echo $moefm_json | jq -M -r ".response.playlist[0].url")
+    local title=$(echo $moefm_json | jq -M -r ".response.playlist[0].sub_title")
+    local album=$(echo $moefm_json | jq -M -r ".response.playlist[0].wiki_title")
+    local artist=$(echo $moefm_json | jq -M -r ".response.playlist[0].artist")
+    local song_siz=$(echo $moefm_json | jq -M -r ".response.playlist[0].file_size")
+
+
+    if [ "$title" = "" ]; then
+	echo "输入好像哪里不对..."
+	exit 0
+    fi
+
+    title=$(switch_net_to_save "$title")
+    album=$(switch_net_to_save "$album")
+    artist=$(switch_net_to_save "$artist")
+
+    title=$(switch_save_to_display "$title")
+    album=$(switch_save_to_display "$album")
+    artist=$(switch_save_to_display "$artist")
+
+    python3 -c 'import scrobble; scrobble.Love_one("'"$title"'", "'"$album"'", "'"$artist"'")' >/dev/null 2>&1
+    echo -e "\e[1m\e[33m$title\e[0m - \e[1m\e[32m$artist\e[0m loved"
+
+
+}
+
 pure_download()
 {
     clear
@@ -109,6 +171,14 @@ pure_download()
 	exit 0
     fi
 
+    title=$(switch_net_to_save "$title")
+    album=$(switch_net_to_save "$album")
+    artist=$(switch_net_to_save "$artist")
+
+    title=$(switch_save_to_display "$title")
+    album=$(switch_save_to_display "$album")
+    artist=$(switch_save_to_display "$artist")
+
     local path="$DATABASE_DIR"
     path+="/$id.mp3"
     title=$(check_str_empty $title)
@@ -124,9 +194,9 @@ pure_download()
     local UI=$TITLE$ALBUM$ARTIST$ID
     printf "$UI" "$title" "$album" "$artist" "$id"
 
-    title=${title//' '/'%20'}
-    album=${album//' '/'%20'}
-    artist=${artist//' '/'%20'}
+    title=$(switch_display_to_save "$title")
+    album=$(switch_display_to_save "$album")
+    artist=$(switch_display_to_save "$artist")
 
     local vect="$id####$title####$album####$artist"
     local res=$(cat $DATABASE | grep "$id")
@@ -194,7 +264,7 @@ show_ui()
 search_local()
 {
     local keywd=$*
-    keywd=${keywd//' '/'%20'}
+    keywd=$(switch_display_to_save "$keywd");
     # I have no choice...
     res=$(cat $DATABASE | grep -i "$keywd")
 
@@ -298,7 +368,7 @@ resolve_json()
 
 
 # main function
-while getopts "a:c:C:D:s:S:r:RhlLX" arg
+while getopts "a:c:C:D:F:s:S:r:RhlLUX" arg
 do
     case $arg in
 	a)
@@ -313,6 +383,9 @@ do
 	    pure_download $ARG
 	    exit 0;;
 
+	F)
+	    love_track $OPTARG
+	    exit 0;;
 	l)
 	    MIX_OPT=1;;
 
@@ -332,6 +405,9 @@ do
 	    KEYWORDS=$OPTARG
 	    SEAR_OPT=1;;
 
+	U)
+	    SCRO_OPT=1;;
+	
 	X)
 	    FREE_OPT=1;;
 
@@ -340,6 +416,7 @@ do
 -a <ALBUM_ID> Specific album
 -C <COLOR>    Set UI Color
 -D <SONG_ID>  Download a song
+-F <SONG_ID>  Love a song
 -h            Show this help page
 -l            Mixed Mode (automatically download and save music)
 -L            Local Mode (if there is no internet connection...)
@@ -347,6 +424,7 @@ do
 -R            Repeat Mode
 -s <SONG_ID>  Specific song
 -S <SONG_NAME> Search a song
+-U            Upload with Last.fm (scrobble)
 -X            Listen freely"
 	    exit 1;;
 
@@ -368,9 +446,9 @@ download()
     local salbum=${playq_alb[$playq_front]}
     local sartist=${playq_art[$playq_front]}
 
-    stitle=${stitle//' '/'%20'}
-    salbum=${salbum//' '/'%20'}
-    sartist=${sartist//' '/'%20'}
+    stitle=$(switch_net_to_save "$stitle")
+    salbum=$(switch_net_to_save "$salbum")
+    sartist=$(switch_net_to_save "$sartist")
 
     local vect="$sid####$stitle####$salbum####$sartist"
 
@@ -436,9 +514,20 @@ play_a_song()
     local salbum=${playq_alb[$playq_front]}
     local sartist=${playq_art[$playq_front]}
     local sid=${playq_id[$playq_front]}
-    stitle=${stitle//'%20'/' '}
-    salbum=${salbum//'%20'/' '}
-    sartist=${sartist//'%20'/' '}
+
+    stitle=$(switch_net_to_save "$stitle")
+    salbum=$(switch_net_to_save "$salbum")
+    sartist=$(switch_net_to_save "$sartist")
+
+    stitle=$(switch_save_to_display "$stitle")
+    salbum=$(switch_save_to_display "$salbum")
+    sartist=$(switch_save_to_display "$sartist")
+
+    if [ "$SCRO_OPT" = "1" ]; then
+	nohup python3 -c 'import scrobble; scrobble.Scrobble_one("'"$stitle"'", "'"$salbum"'", "'"$sartist"'")' >/dev/null 2>&1 &
+    fi
+
+
     clear
     show_ui "$stitle" "$salbum" "$sartist" "$sid"
     play

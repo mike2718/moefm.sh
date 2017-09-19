@@ -44,6 +44,28 @@ remove_sing()
     echo -e "ID为\e[1m\e[33m$sid\e[0m的歌曲已从数据库中移出"
 }
 
+switch_display_to_save()
+{
+    local str=$*;
+    str=${str//"'"/'&#039;'}
+    str=${str//"<"/'&lt;'}
+    str=${str//">"/'&gt;'}
+    str=${str//" "/'%20'}
+    echo "$str"
+}
+
+switch_save_to_display()
+{
+    local str=$*;
+    str=${str//'&#039;'/"'"}
+    str=${str//'&#39;'/"'"}
+    str=${str//'&lt;'/'<'}
+    str=${str//'&gt;'/'>'}
+    str=${str//'%20'/' '};
+    echo "$str"
+}
+
+
 clean()
 {
     local size=$*
@@ -173,6 +195,7 @@ dump_one()
 search_database()
 {
     arg=$*
+    arg=$(switch_display_to_save "$arg")
     clear
     son=$(cat $DATABASE | grep -i "$arg")
 
@@ -187,10 +210,11 @@ search_database()
 	    local tit=$(echo $i | awk -F '####' '{print $2}')
 	    local alb=$(echo $i | awk -F '####' '{print $3}')
 	    local art=$(echo $i | awk -F '####' '{print $4}')
-	    id=${id//'%20'/' '}
-	    tit=${tit//'%20'/' '}
-	    alb=${alb//'%20'/' '}
-	    art=${art//'%20'/' '}
+	    id=$(switch_save_to_display "$id")
+	    tit=$(switch_save_to_display "$tit")
+	    alb=$(switch_save_to_display "$alb")
+	    art=$(switch_save_to_display "$art")
+
 	    echo -e "曲名: \e[1m\e[33m$tit\e[0m"
 	    echo -e "专辑: \e[1m\e[33m$alb\e[0m"
 	    echo -e "艺术家: \e[1m\e[33m$art\e[0m"
