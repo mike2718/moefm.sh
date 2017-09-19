@@ -63,6 +63,9 @@ moefm.sh:
 ./moefm.sh -D 191459
 # 将song_id为191459的歌曲下载到本地数据库中
 
+/moefm.sh -F 191459
+# 在Last.fm 上收藏song_id为191459的歌曲
+
 ./moefm.sh -S "ぽっぴんジャンプ♪"
 # 搜索这首歌曲并播放
 
