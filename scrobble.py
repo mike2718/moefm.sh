@@ -12,8 +12,8 @@ imp.reload(sys)
 API_KEY = "efadf48ab3d1300a9e67806e78980bdd"
 API_SECRET = "7648e2b0c8add66b75c5d5ae3ad208be"
 
-username="Templ_1";
-password_hash = pylast.md5("+Bzq15391581165");
+username="your_username";
+password_hash = pylast.md5("your_password");
 
 
 
