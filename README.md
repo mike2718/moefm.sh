@@ -11,7 +11,10 @@
 Lubuntu / Ubuntu:
 
 ```bash
-sudo apt-get install mpg123 curl jq git wget mp3info
+sudo apt-get install mpg123 curl jq git wget mp3info python3 python3-pip
+
+pip3 install pylast
+
 ```
 
 OSX (with [Homebrew](https://brew.sh/)):
@@ -39,6 +42,9 @@ cd moefm.sh
 之后请打开一个新的终端进行操作
 
 ![打开新终端](assets/img/moefm.sh_install_2.png)
+
+如果需要使用Last.fm的同步功能，请修改scrobble.py
+![提供last.fm的信息](assets/img/lastfm_usage.png)
 
 
 ## 参数
@@ -71,6 +77,9 @@ moefm.sh:
 # 如果既没有 -l，也没有-L，为常规模式，
 # 从网络上下载元数据并在本地检索，若存在歌曲即用本地文件播放，
 # 不存在则用网络播放，但不保存到本地
+
+./moefm.sh -U
+# 自动将所听的歌曲发布到Last.fm上
 
 ./moefm.sh -C red
 # 改变粗体字的颜色，
