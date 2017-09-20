@@ -46,7 +46,7 @@ cd moefm.sh
 
 
 如果要使用关键字过滤功能，请将关键字追加到数据库文件夹中的filter文件里
-![关键字筛选](assets/img/filter.img)
+![关键字筛选](assets/img/filter.png)
 播放时排除掉标题中含有"inst"和"instrumental"(不区分大小写)的关键字
 
 ## 参数
