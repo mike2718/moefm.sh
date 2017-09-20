@@ -37,6 +37,7 @@ playq_alb=()
 playq_art=()
 playq_id=()
 playq_size=()
+cover_url=()
 
 playq_back=0
 playq_front=0
@@ -49,6 +50,7 @@ push_playq()
     playq_art[$playq_back]=$4
     playq_id[$playq_back]=$5
     playq_size[$playq_back]=$6
+    cover_url[$playq_back]=$7
     playq_back=$(($playq_back+1))
 }
 
@@ -65,6 +67,7 @@ change_playq_front()
     playq_art[$playq_front]=$4
     playq_id[$playq_front]=$5
     playq_size[$playq_front]=$6
+    cover_url[$playq_back]=$7
 }
 # for dynamically resolving
 
@@ -116,7 +119,49 @@ switch_display_to_save()
     str=${str//" "/'%20'}
     echo "$str"
 }
-	 
+
+show_cover()
+{
+
+    local url=$*
+    echo "HIT!"
+    wget -O "$DATABASE_DIR/opt.jpg"  "$url"
+    pos=$(xwininfo -id $(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}') | grep "\-geometry" | awk '{print $2}')
+
+    echo $pos
+
+    wid=$(echo $pos | awk -F 'x' '{print $1}')
+    res=$(echo $pos | awk -F 'x' '{print $2}')
+    hei=$(echo $res | awk -F '+' '{print $1}')
+    xcnt=$(echo $res | awk -F '+' '{print $2}')
+    ycnt=$(echo $res | awk -F '+' '{print $3}')
+
+    if [ "$ycnt" = "" ]; then
+	ycnt="0"
+    fi
+    if [ "$xcnt" = "" ]; then
+	xcnt="0"
+    fi
+
+    echo "xcnt:$xcnt ycnt:$ycnt wid=$wid  hei=$hei"
+
+    nx=$(($wid))
+    nx=$(($nx+$xcnt))
+    ny=$(($hei*2))
+    ny=$(($ny+$ycnt))
+
+    pic=$(identify "$DATABASE_DIR/opt.jpg" | awk '{print $3}')
+    echo "nx:$nx ny:$ny"
+
+    px=$(echo $pic | awk -F 'x' '{print $1}')
+    py=$(echo $pic | awk -F 'x' '{print $2}')
+
+    echo "px=$px, py=$py"
+
+    feh -g "$pic+$nx+$ny" -x "$DATABASE_DIR/opt.jpg"
+
+}
+
 love_track()
 {
     local id=$*
@@ -237,10 +282,15 @@ show_ui()
     ARTIST="艺术家: ${bold}${COLOR_ARG}%s\n${reset}"
     ID="歌曲ID: ${bold}${COLOR_ARG}%s\n\n${reset}"
     CONTROLLER="${bold}${COLOR_ARG}[SPACE]${reset} 暂停/继续 ${bold}${COLOR_ARG}[q]${reset} 下一曲 ${bold}${COLOR_ARG}[Ctrl-Z]${reset} 退出\n"
-
+    
     UI=$TITLE$ALBUM$ARTIST$ID$CONTROLLER
 
     printf "$UI" "$1" "$2" "$3" "$4"
+
+    if [ "$COV_OPT" = "1" ]; then
+	echo "cover_url=${cover_url[$playq_front]}"
+	show_cover "${cover_url[$playq_front]}"
+    fi
 }
 
 
@@ -279,7 +329,7 @@ search_local()
 	salb=$(check_str_empty $salb)
 	sart=$(check_str_empty $sart)
 
-	push_playq "null" "$stit" "$salb" "$sart" "$sid" "null" 
+	push_playq "null" "$stit" "$salb" "$sart" "$sid" "null" "null"
     done
 }
 
@@ -305,7 +355,7 @@ search()
 	    local s_url=$BASE_URL
 	    s_url+="&song=$s_id"
 	    s_url+=$API_KEY
-	    push_playq "$s_url" "to_be_resolved" "to_be_resolved" "to_be_resolved" "$s_id" "to_be_resolved"
+	    push_playq "$s_url" "to_be_resolved" "to_be_resolved" "to_be_resolved" "$s_id" "to_be_resolved" "to_be_resolved"
 	    # dynamic resolve to lessen server burden
 	fi
     done
@@ -331,12 +381,14 @@ require_list()
 	local artist=$(echo $moefm_json | jq -M -r ".response.playlist[$i].artist")
 	local song_id=$(echo $moefm_json | jq -M -r ".response.playlist[$i].sub_id")
 	local song_siz=$(echo $moefm_json | jq -M -r ".response.playlist[$i].file_size")
+	local song_cov=$(echo $moefm_json | jq -M -r ".response.playlist[$i].cover.large")
+	# large okay?
 
 	title=$(check_str_empty $title)
 	album=$(check_str_empty $album)
 	artist=$(check_str_empty $artist)
 
-	push_playq "$mp3_url" "$title" "$album" "$artist" "$song_id" "$song_siz"
+	push_playq "$mp3_url" "$title" "$album" "$artist" "$song_id" "$song_siz" "$song_cov"
     done
 }
 
@@ -356,19 +408,19 @@ resolve_json()
 	local artist=$(echo $moefm_json | jq -M -r ".response.playlist[$i].artist")
 	local id=$(echo $moefm_json | jq -M -r ".response.playlist[$i].sub_id")
 	local size=$(echo $moefm_json | jq -M -r ".response.playlist[$i].file_size")
-
+	local cov=$(echo $moefm_json | jq -M -r ".response.playlist[$i].cover.large")
 	title=$(check_str_empty $title)
 	album=$(check_str_empty $album)
 	artist=$(check_str_empty $artist)
 
-	change_playq_front "$mp3_url" "$title" "$album" "$artist" "$id" "$size"
+	change_playq_front "$mp3_url" "$title" "$album" "$artist" "$id" "$size" "$cov"
     done
 
 }
 
 
 # main function
-while getopts "a:c:C:D:F:s:S:r:RhlLUX" arg
+while getopts "a:c:C:D:F:s:S:r:RhlLUXI" arg
 do
     case $arg in
 	a)
@@ -386,6 +438,10 @@ do
 	F)
 	    love_track $OPTARG
 	    exit 0;;
+
+	I)
+	    COV_OPT=1;;
+
 	l)
 	    MIX_OPT=1;;
 
