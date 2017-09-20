@@ -162,6 +162,33 @@ show_cover()
 
 }
 
+
+block_song()
+{
+    local keywd="$*"
+    keywd=$(switch_display_to_save $keywd)
+    local blocked="0"
+
+    for line in $(<"$DATABASE_DIR/filter")
+    do
+	res=$(echo "$keywd" | grep -i "$line")
+
+	#	if [[ "$keywd" =~ "$line" ]]; then
+	if [ "$res" != "" ]; then
+	    blocked="1"
+
+	    break
+	fi
+    done
+
+    if [ "$blocked" = "0" ]; then
+	echo "true"
+    else
+	echo "false"
+    fi
+}
+
+
 love_track()
 {
     local id=$*
@@ -574,19 +601,27 @@ play_a_song()
     stitle=$(switch_net_to_save "$stitle")
     salbum=$(switch_net_to_save "$salbum")
     sartist=$(switch_net_to_save "$sartist")
+    
 
-    stitle=$(switch_save_to_display "$stitle")
-    salbum=$(switch_save_to_display "$salbum")
-    sartist=$(switch_save_to_display "$sartist")
+    ass=$(block_song "$stitle")
 
-    if [ "$SCRO_OPT" = "1" ]; then
-	nohup python3 -c 'import scrobble; scrobble.Scrobble_one("'"$stitle"'", "'"$salbum"'", "'"$sartist"'")' >/dev/null 2>&1 &
+
+    if [ "$ass" = "true" ]; then
+	stitle=$(switch_save_to_display "$stitle")
+	salbum=$(switch_save_to_display "$salbum")
+	sartist=$(switch_save_to_display "$sartist")
+
+	if [ "$SCRO_OPT" = "1" ]; then
+	    nohup python3 -c 'import scrobble; scrobble.Scrobble_one("'"$stitle"'", "'"$salbum"'", "'"$sartist"'")' >/dev/null 2>&1 &
+	fi
+
+
+	clear
+	show_ui "$stitle" "$salbum" "$sartist" "$sid"
+	play
+
+
     fi
-
-
-    clear
-    show_ui "$stitle" "$salbum" "$sartist" "$sid"
-    play
     pop_playq
 }
 
@@ -605,7 +640,8 @@ if [ "$MOEFM_DATABASE" = "" ]; then
     echo "export MOEFM_DATABASE=$dab" >> "$HOME/.bashrc"
     source "$HOME/.bashrc"
     mkdir $dab
-    touch $dab/database
+    touch "$dab/database"
+    touch "$dab/filter"
     exit 0
 fi
 
