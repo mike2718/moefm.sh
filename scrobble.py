@@ -129,7 +129,7 @@ def Love_one(title, album, artist):
     print(title);
     buf = '';
 
-        # Clip every word into search_vector
+
     
     for i in range(0, len(title)):
         if title[i] == ' ':
@@ -142,7 +142,7 @@ def Love_one(title, album, artist):
 
 
         sear_vec.append(buf);
-        # last one
+
         
         for i in range(0, len(sear_vec)):
             print(sear_vec[i]);
@@ -162,32 +162,14 @@ def Love_one(title, album, artist):
 
         if len(albums) > 0:
             art = albums[0].get_artist();
-
-            # Traceback and search track...
-            # search = network.search_for_track(art, sear_vec[0]);
-            # tracks = search.get_next_page();
-            # # In round search
-            # if len(tracks) > 0:
-            #     network.scrobble(tracks[0].get_artist(), tracks[0].get_name(), time.time(), tracks[0].get_album());
-            #     print("Round 2+ FOUND!");
-            #     return;
-            # VERY DANGEROUS...
-
-            # Note: this part of search hardly hit the target...
-            # So I removed it...
-
-
-            
-            # Still can't find track... Force add...
             loved = pylast.Track(albums[0].get_artist(), title, network);
             loved.love();
-            # このなまえ..
             
             print("Round 3 FOUND!");
             return;
 
-    # If still can't fetch.........
-    # Huhuhuhuhu~~~~~~Generate Album Information
+    # Generate Round
+
     if album != '未知':
         loved = pylast.Track(artist, title, network);
     else:

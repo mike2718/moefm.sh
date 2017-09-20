@@ -42,7 +42,15 @@ cd moefm.sh
 ![打开新终端](assets/img/moefm.sh_install_2.png)
 
 如果需要使用Last.fm的同步功能，请修改scrobble.py		
+
 ![提供last.fm的信息](assets/img/lastfm_usage.png)
+
+
+如果要使用关键字过滤功能，请将关键字追加到数据库文件夹中的filter文件里
+
+![关键字筛选](assets/img/filter.png)
+
+播放时排除掉标题中含有"inst"和"instrumental"(不区分大小写)的关键字
 
 ## 参数
 
