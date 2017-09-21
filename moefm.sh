@@ -54,6 +54,7 @@
 BASE_URL='http://moe.fm/listen/playlist?api=json'
 # moefm play API(所谓'专用接口')
 SEARCH_URL='http://api.moefou.org/search/sub.json?sub_type=song'
+W3MIMG_PATH='/usr/lib/w3m/w3mimgdisplay'
 # moefm search API(通用借口，搜索[子条目(单首歌曲)])
 # TODO: 增加搜索wiki(专辑/相关列表)的功能
 API_KEY='&api_key=4e229396346768a0c4ee2462d76eb0be052592bf8'
@@ -184,51 +185,17 @@ show_cover()
 {    
     local url=$*
 
-    
-    echo "HIT!"
+    echo -e "`tput rc`"    
+#    echo "HIT!"
     # delete it after tested
-    
-    wget -O "$DATABASE_DIR/opt.jpg"  "$url"
+
+    nohup wget -O "$DATABASE_DIR/opt.jpg"  "$url" >/dev/null 2>&1
     # 应对网络不稳定的情况，所以先下载到本地再显示...
-    pos=$(xwininfo -id $(xprop -root | awk '/_NET_ACTIVE_WINDOW\(WINDOW\)/{print $NF}') | grep "\-geometry" | awk '{print $2}')
-    # Terminal窗口的位置
-    # 详细信息见Xorg geometry文档
 
-    echo $pos
 
-    wid=$(echo $pos | awk -F 'x' '{print $1}')
-    res=$(echo $pos | awk -F 'x' '{print $2}')
-    hei=$(echo $res | awk -F '+' '{print $1}')
-    xcnt=$(echo $res | awk -F '+' '{print $2}')
-    ycnt=$(echo $res | awk -F '+' '{print $3}')
+    echo -e "0;1;1;150;300;300;;;300;300;$DATABASE_DIR/opt.jpg\n4;\n3;" | /usr/lib/w3m/w3mimgdisplay 
 
-    if [ "$ycnt" = "" ]; then
-	ycnt="0"
-    fi
-    # 如果某个位置是0，它不会返回任何值...
-    if [ "$xcnt" = "" ]; then
-	xcnt="0"
-    fi
 
-    echo "xcnt:$xcnt ycnt:$ycnt wid=$wid  hei=$hei"
-
-    nx=$(($wid))
-    nx=$(($nx+$xcnt))
-    ny=$(($hei*2))
-    ny=$(($ny+$ycnt))
-    # 要展示的图片的位置
-
-    pic=$(identify "$DATABASE_DIR/opt.jpg" | awk '{print $3}')
-    # 图片的大小信息
-    echo "nx:$nx ny:$ny"
-
-    px=$(echo $pic | awk -F 'x' '{print $1}')
-    py=$(echo $pic | awk -F 'x' '{print $2}')
-
-    echo "px=$px, py=$py"
-
-    feh -g "$pic+$nx+$ny" -x "$DATABASE_DIR/opt.jpg"
-    # 使用feh作为看图工具(display什么的...其实个人不太喜欢)
 
 }
 
@@ -419,10 +386,9 @@ show_ui()
     
     UI=$TITLE$ALBUM$ARTIST$ID$CONTROLLER
 
-    printf "$UI" "$1" "$2" "$3" "$4"
+    printf "`tput sc`$UI" "$1" "$2" "$3" "$4"
 
     if [ "$COV_OPT" = "1" ]; then
-	echo "cover_url=${cover_url[$playq_front]}"
 	show_cover "${cover_url[$playq_front]}"
     fi
 }
@@ -752,6 +718,8 @@ play_a_song()
 	    # -U 选项，同步到last.fm
 	    nohup python3 -c 'import scrobble; scrobble.Scrobble_one("'"$stitle"'", "'"$salbum"'", "'"$sartist"'")' >/dev/null 2>&1 &
 	fi
+
+
 
 
 	clear
