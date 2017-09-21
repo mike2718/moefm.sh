@@ -817,8 +817,10 @@ while true; do
 
     if [ "$*" = "" ]; then
 	# 什么都没有输入...
-	echo -e "Please enter an argument, use ./moefm.sh -h to get help"
-	exit 0
+	# 随便播放吧~
+	#	echo -e "Please enter an argument, use ./moefm.sh -h to get help"
+	REPT_OPT=1
+	require_list ""
     fi
 
     if [ "$(check_que_empty)" = "1" ]; then
