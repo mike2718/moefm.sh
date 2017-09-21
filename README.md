@@ -10,7 +10,7 @@
 Lubuntu / Ubuntu:
 
 ```bash
-sudo apt-get install mpg123 curl jq git wget mp3info python3 python3-pip		 
+sudo apt-get install mpg123 curl jq git wget mp3info python3 python3-pip w3m-img
 
 pip3 install pylast
 ```
@@ -75,6 +75,9 @@ moefm.sh:
 
 ./moefm.sh -S "ぽっぴんジャンプ♪"
 # 搜索这首歌曲并播放
+
+./moefm.sh -I
+# 播放时(如果有)显示专辑封面
 
 ./moefm.sh -l
 # 混合模式，听歌的同时会保存歌曲到本地
