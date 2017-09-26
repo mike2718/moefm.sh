@@ -59,6 +59,12 @@ moefm.sh:
 ./moefm.sh -X
 # 随机播放一些歌曲
 
+./moefm.sh -A
+# 播放本地所有歌曲
+
+./moefm.sh -A -f
+# 播放本地所有已收藏歌曲
+
 ./moefm.sh -s 191459
 # 播放song_id为191459的歌曲
 # 相当于网页播放 http://moe.fm/listen/h5?song=191459
