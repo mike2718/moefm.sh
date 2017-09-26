@@ -163,7 +163,12 @@ switch_save_to_display()
     str=${str//'&#39;'/"'"}
     str=${str//'&lt;'/'<'}
     str=${str//'&gt;'/'>'}
-    str=${str//'%20'/' '};
+    str=${str//'%20'/' '}
+    str=${str//'&quot;'/'"'}
+    str=${str//'&#34;'/'"'}
+    str=${str//'&amp;'/'&'}
+    str=${str//'&#38;'/'&'}
+    
     echo "$str"
 }
 
@@ -175,6 +180,8 @@ switch_display_to_save()
     str=${str//"<"/'&lt;'}
     str=${str//">"/'&gt;'}
     str=${str//" "/'%20'}
+    str=${str//'"'/'&#34;'}
+    str=${str//'&'/'&amp;'}
     echo "$str"
 }
 
@@ -255,11 +262,26 @@ love_track()
     album=$(switch_net_to_save "$album")
     artist=$(switch_net_to_save "$artist")
 
+    local vect="$id####$title####$album####$artist####1"
+    
     title=$(switch_save_to_display "$title")
     album=$(switch_save_to_display "$album")
     artist=$(switch_save_to_display "$artist")
 
     python3 -c 'import scrobble; scrobble.Love_one("'"$title"'", "'"$album"'", "'"$artist"'")' >/dev/null 2>&1
+
+
+    local res=$(cat $DATABASE | grep "$id")
+
+
+    if [ "$res" != "" ]; then
+	# 数据库中有这首歌曲
+	sed -i '/^'"$id"'/d' $DATABASE
+	# delete previous entry
+	echo "$vect" >>  $DATABASE
+	# Add a new entry
+    fi
+
     # 调用python库.., 见scrobble.py
     echo -e "\e[1m\e[33m$title\e[0m - \e[1m\e[32m$artist\e[0m loved"
 
@@ -537,11 +559,15 @@ resolve_json()
 
 # main function
 # 约定OPT表示是否选择，ARG为选项参数
-while getopts "a:c:C:D:F:s:S:r:RhlLUXI" arg
+while getopts "a:c:C:D:F:s:S:r:AfRhlLUXI" arg
 do
     case $arg in
 	a)
 	    ALBUM_ARG=$OPTARG;;
+
+	A)
+	    ABS_LOCAL=1
+	    LOC_ALL_OPT=1;;
 
 	C)
 	    tmp=$OPTARG
@@ -551,6 +577,9 @@ do
 	    ARG=$OPTARG
 	    pure_download $ARG
 	    exit 0;;
+
+	f)
+	    LOC_LOV_OPT=1;;
 
 	F)
 	    love_track $OPTARG
@@ -587,9 +616,11 @@ do
 	h)
 	    echo -e "usage: moefm.sh [option(s)]\n
 -a <ALBUM_ID> Specific album
+-A            [with -L] Playing all local songs
 -C <COLOR>    Set UI Color
 -D <SONG_ID>  Download a song
 -F <SONG_ID>  Love a song
+-f            [with -L] Playing loved songs
 -h            Show this help page
 -l            Mixed Mode (automatically download and save music)
 -L            Local Mode (if there is no internet connection...)
@@ -719,7 +750,14 @@ play_a_song()
 	    nohup python3 -c 'import scrobble; scrobble.Scrobble_one("'"$stitle"'", "'"$salbum"'", "'"$sartist"'")' >/dev/null 2>&1 &
 	fi
 
-
+	if [ "$LOC_LOV_OPT" = "1" -a "$ABS_LOCAL" = "1"  ]; then
+	    local vect=$(cat $DATABASE | grep "$sid")
+	    local lov=$(echo "$vect" | awk -F '####' '{print $5}')
+	    if [ "$lov" == "" ]; then
+		pop_playq
+		return
+	    fi
+	fi
 
 
 	clear
@@ -778,6 +816,10 @@ while true; do
 	require_list "&radio=$RADIO_ARG"
     fi
 
+    if [ -n "$LOC_ALL_OPT" ]; then
+	search_local "#"
+    fi
+    
     if [ -n "$FREE_OPT" ]; then
 	# -X 选项，自由播放
 	require_list ""
