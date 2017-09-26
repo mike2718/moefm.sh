@@ -49,25 +49,35 @@ remove_sing()
 }
 
 # 见moefm.sh中的说明
-switch_display_to_save()
-{
-    local str=$*;
-    str=${str//"'"/'&#039;'}
-    str=${str//"<"/'&lt;'}
-    str=${str//">"/'&gt;'}
-    str=${str//" "/'%20'}
-    echo "$str"
-}
 
-# 见moefm.sh中的说明
 switch_save_to_display()
+# 将数据库中的数据转换为可视数据
+# 数据库里的条目应当避免出现 ' < > '_'(空格)等字符
 {
     local str=$*;
     str=${str//'&#039;'/"'"}
     str=${str//'&#39;'/"'"}
     str=${str//'&lt;'/'<'}
     str=${str//'&gt;'/'>'}
-    str=${str//'%20'/' '};
+    str=${str//'%20'/' '}
+    str=${str//'&quot;'/'"'}
+    str=${str//'&#34;'/'"'}
+    str=${str//'&amp;'/'&'}
+    str=${str//'&#38;'/'&'}
+    
+    echo "$str"
+}
+
+switch_display_to_save()
+# 将可视数据转换为数据库中可保存的数据
+{
+    local str=$*;
+    str=${str//"'"/'&#039;'}
+    str=${str//"<"/'&lt;'}
+    str=${str//">"/'&gt;'}
+    str=${str//" "/'%20'}
+    str=${str//'"'/'&#34;'}
+    str=${str//'&'/'&amp;'}
     echo "$str"
 }
 
