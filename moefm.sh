@@ -156,7 +156,7 @@ switch_net_to_save()
     str=${str//' '/'%20'};
     echo "$str"
 }
-# 幼稚
+
 
 
 switch_save_to_display()
