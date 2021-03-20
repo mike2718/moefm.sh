@@ -1,5 +1,7 @@
 ﻿# 萌否电台bash脚本客户端
 
+## 请注意：由于萌否停止服务，本项目不再继续。
+
 用终端听[萌否电台](http://moe.fm)。
 
 ![萌否电台数据库管理](assets/img/moefm_with_image.png)
